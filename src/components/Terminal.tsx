@@ -18,7 +18,7 @@ const Terminal = () => {
   const terminalContentRef = useRef<HTMLDivElement>(null);
   const commands = [
     { command: "whoami", response: "Amir Agassi" },
-    { command: "caet amir_info.txt", response: "Wilfrid Laurier University, BSc Computer Science, Year 3\nWestern Governors University, BSc Cybersecurity & Information Assurance, Year 3" },
+    { command: "cat amir_info.txt", response: "Wilfrid Laurier University, BSc Computer Science, Year 3\nWestern Governors University, BSc Cybersecurity & Information Assurance, Year 3" },
   ];
 
   useEffect(() => {
