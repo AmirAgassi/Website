@@ -1,7 +1,7 @@
 import cybersecurityImage from '../assets/blog/wlu.png';
 import wguImage from '../assets/blog/wgu.png';
 import ethglobalImage from '../assets/blog/ethglobal.png';
-import danghuiImage from '../assets/blog/ethglobal.png';
+import danghuiImage from '../assets/blog/danghui.jpg';
 
 export interface BlogPost {
   id: string;
@@ -9,6 +9,7 @@ export interface BlogPost {
   excerpt: string;
   date: string;
   image: string;
+  imageFit?: 'contain' | 'cover';
   path: string;
   published: boolean;
   locked?: {
@@ -16,13 +17,17 @@ export interface BlogPost {
   };
   type?: 'writeup';
   pdf?: string;
+  tag?: {
+    text: string;
+    color: string;
+  };
 }
 
 export const posts: BlogPost[] = [
   {
     id: 'first-post',
-    title: 'WLU Information Disclosure Exposed: By Using Bing',
-    excerpt: 'How I exposed sensitive financial and student information to my university, by being the only student that actually used Bing. Unironically.',
+    title: 'WLU Information Exposed: By Using Bing',
+    excerpt: 'How I disclosed exposed financial and student information to my university, by being the only student that actually used Bing. Unironically.',
     date: '2024-01-03',
     image: cybersecurityImage,
     path: '/blog/first-post',
@@ -39,6 +44,10 @@ export const posts: BlogPost[] = [
     published: true,
     locked: {
       until: "2025-03-10"
+    },
+    tag: {
+      text: "INSANE",
+      color: "#ff3d47"
     }
   },
   {
@@ -52,13 +61,14 @@ export const posts: BlogPost[] = [
   },
   {
     id: 'danghui-writeup',
-    title: 'Danghui Writeup',
-    excerpt: 'A writeup for a CTF challenge I did with my team.',
+    title: 'Danghui cLVM: Revolutionary Exploit',
+    excerpt: 'A technical deep-dive into Danghui, a groundbreaking Roblox exploit I developed that introduced a novel approach to script execution using an external Lua virtual machine.',
     date: '2024-05-30',
     image: danghuiImage,
+    imageFit: 'contain',
     path: '/blog',
     published: true,
     type: 'writeup',
-    pdf: '/writeups/danghui-writeup.pdf'
+    pdf: '/writeups/danghui_clvm.pdf'
   }
 ]; 

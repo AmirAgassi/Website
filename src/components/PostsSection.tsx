@@ -47,6 +47,8 @@ const BlogCard = styled(Card)(({ theme }) => ({
 
 const BlogMedia = styled(CardMedia)({
   paddingTop: '56.25%',
+  backgroundRepeat: 'no-repeat',
+  backgroundColor: '#f5f5f5',
 });
 
 const BlogContent = styled(CardContent)({
@@ -123,6 +125,7 @@ const BlogSection = () => {
   const [scale, setScale] = useState(1.0);
 
   const handlePostClick = (post: typeof posts[0]) => {
+    if (post.locked) return;
     if (post.type === 'writeup' && post.pdf) {
       setSelectedPost(post);
       setOpenPdfModal(true);
@@ -172,12 +175,21 @@ const BlogSection = () => {
         {publishedPosts.map((post) => (
           <Box
             key={post.id}
-            onClick={() => handlePostClick(post)}
-            component={post.type === 'writeup' ? 'div' : Link}
-            to={post.type === 'writeup' ? undefined : post.path}
-            style={{ textDecoration: 'none' }}
+            onClick={() => !post.locked && handlePostClick(post)}
+            component={post.locked || post.type === 'writeup' ? 'div' : Link}
+            to={post.locked ? undefined : post.path}
+            style={{ 
+              textDecoration: 'none',
+              cursor: post.locked ? 'default' : 'pointer'
+            }}
           >
-            <BlogCard>
+            <BlogCard sx={{ 
+              cursor: post.locked ? 'default' : 'pointer',
+              '&:hover': {
+                transform: post.locked ? 'none' : 'translateY(-10px)',
+                boxShadow: post.locked ? '0 4px 8px rgba(0, 0, 0, 0.1)' : '0 20px 40px rgba(0, 0, 0, 0.2)',
+              },
+            }}>
               {post.locked && (
                 <LockedOverlay>
                   <Box>
@@ -199,6 +211,9 @@ const BlogSection = () => {
               <BlogMedia
                 image={post.image}
                 title={post.title}
+                sx={{ 
+                  backgroundSize: post.imageFit || 'cover',
+                }}
               />
               <BlogContent>
                 <Box>
@@ -220,13 +235,33 @@ const BlogSection = () => {
                     {post.excerpt}
                   </BlogExcerpt>
                 </Box>
-                <Typography variant="caption" color="text.secondary" sx={{ 
+                <Box sx={{ 
                   mt: 2,
-                  display: 'block',
-                  textAlign: 'right'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
                 }}>
-                  {post.date}
-                </Typography>
+                  <Box sx={{ minWidth: post.tag ? 'auto' : '0' }}>
+                    {post.tag && (
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          backgroundColor: `${post.tag.color}50`,
+                          color: 'white',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          fontWeight: 'bold',
+                          letterSpacing: '0.5px',
+                        }}
+                      >
+                        {post.tag.text}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {post.date}
+                  </Typography>
+                </Box>
               </BlogContent>
             </BlogCard>
           </Box>
@@ -237,18 +272,27 @@ const BlogSection = () => {
       <Dialog
         open={openPdfModal}
         onClose={handleClosePdfModal}
-        maxWidth="lg"
-        fullWidth
+        maxWidth={false}
         PaperProps={{
           sx: {
-            minHeight: '90vh',
+            height: 'auto',
             maxHeight: '90vh',
+            width: 'auto',
+            maxWidth: '90vw',
             display: 'flex',
             flexDirection: 'column',
+            m: 2
           }
         }}
       >
-        <DialogContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'hidden' }}>
+        <DialogContent sx={{ 
+          flex: 1, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          overflow: 'hidden',
+          p: 2
+        }}>
           <Box sx={{ position: 'absolute', right: 8, top: 8, zIndex: 1 }}>
             <IconButton onClick={handleClosePdfModal} size="large">
               <CloseIcon />
@@ -271,7 +315,14 @@ const BlogSection = () => {
               <NavigateNext />
             </IconButton>
           </Box>
-          <Box sx={{ flex: 1, overflow: 'auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ 
+            overflow: 'auto', 
+            display: 'flex', 
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%'
+          }}>
             {selectedPost && (
               <Document
                 file={selectedPost.pdf}

@@ -37,7 +37,7 @@ const AppContent = () => {
         maxWidth="lg"
         sx={{ 
           width: '100%',
-          maxWidth: isBlogPost ? '90%' : 'lg',
+          maxWidth: '100%',
           margin: '0 auto'
         }}
       >
