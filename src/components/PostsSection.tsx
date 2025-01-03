@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, CardMedia, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
+import { Lock } from '@mui/icons-material';
 import { posts } from '../data/posts';
 
 const BlogCard = styled(Card)(({ theme }) => ({
@@ -15,6 +16,7 @@ const BlogCard = styled(Card)(({ theme }) => ({
   },
   cursor: 'pointer',
   minHeight: '400px',
+  position: 'relative',
 }));
 
 const BlogMedia = styled(CardMedia)({
@@ -38,6 +40,31 @@ const BlogExcerpt = styled(Typography)({
   minHeight: '6.2em',
 });
 
+const LockedOverlay = styled(Box)({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  height: '56.25%',
+  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  paddingTop: '10%',
+  color: 'white',
+  zIndex: 1,
+  backdropFilter: 'blur(2px)',
+  transition: 'opacity 0.3s ease-in-out',
+  '& .MuiSvgIcon-root': {
+    fontSize: '3rem',
+    marginBottom: '1rem',
+    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))',
+  },
+  '& .MuiTypography-root': {
+    textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+  }
+});
+
 const BlogSection = () => {
   // Only show published posts in the blog section
   const publishedPosts = posts.filter(post => post.published);
@@ -58,6 +85,17 @@ const BlogSection = () => {
           <Grid item key={post.id} xs={12} sm={6} md={4}>
             <Link to={post.path} style={{ textDecoration: 'none' }}>
               <BlogCard>
+                {post.locked && (
+                  <LockedOverlay>
+                    <Lock />
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                      Content Locked
+                    </Typography>
+                    <Typography variant="body2" align="center">
+                      Available {post.locked.until}
+                    </Typography>
+                  </LockedOverlay>
+                )}
                 <BlogMedia
                   image={post.image}
                   title={post.title}
@@ -67,6 +105,7 @@ const BlogSection = () => {
                     <Typography gutterBottom variant="h5" component="div" sx={{
                       fontWeight: 'bold',
                       mb: 2,
+                      textAlign: 'center'
                     }}>
                       {post.title}
                     </Typography>

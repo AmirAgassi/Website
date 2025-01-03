@@ -1,5 +1,5 @@
 import cybersecurityImage from '../assets/blog/wlu.png';
-import aiImage from '../assets/blog/wlu.png';
+import aiImage from '../assets/blog/wgu.png';
 import codingImage from '../assets/blog/wlu.png';
 
 export interface BlogPost {
@@ -10,6 +10,9 @@ export interface BlogPost {
   image: string;
   path: string;
   published: boolean;
+  locked?: {
+    until: string;
+  };
 }
 
 export const posts: BlogPost[] = [
@@ -23,13 +26,16 @@ export const posts: BlogPost[] = [
     published: true
   },
   {
-    id: 'upcoming-post',
-    title: "I'm gonna start",
-    excerpt: "writing them",
+    id: 'bachelors-degree-any-speedrun',
+    title: "1-term NA Bachelors Degree Any% Speedrun",
+    excerpt: "My quest to finish the world's fastest possible bachelors degree, taking all my classes in a single term, all while being a full-time student & working.",
     image: aiImage,
-    date: "2023-06-15",
+    date: "2025-03-10",
     path: "/blog",
-    published: false
+    published: true,
+    locked: {
+      until: "2025-03-10"
+    }
   },
   {
     id: 'draft-post',
