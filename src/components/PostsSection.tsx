@@ -37,7 +37,7 @@ const BlogExcerpt = styled(Typography)({
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  minHeight: '6.2em',
+  minHeight: '4.2em',
 });
 
 const LockedOverlay = styled(Box)({
@@ -72,7 +72,6 @@ const LockedOverlay = styled(Box)({
 });
 
 const BlogSection = () => {
-  // Only show published posts in the blog section
   const publishedPosts = posts.filter(post => post.published);
 
   return (
@@ -110,11 +109,18 @@ const BlogSection = () => {
                 />
                 <BlogContent>
                   <Box>
-                    <Typography gutterBottom variant="h5" component="div" sx={{
-                      fontWeight: 'bold',
-                      mb: 2,
-                      textAlign: 'center'
-                    }}>
+                    <Typography 
+                      variant="h5" 
+                      sx={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        minHeight: '3.6em',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        lineHeight: '1.4em',
+                        margin: 0,
+                      }}
+                    >
                       {post.title}
                     </Typography>
                     <BlogExcerpt variant="body2" color="text.secondary">
