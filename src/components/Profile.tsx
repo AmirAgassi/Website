@@ -21,11 +21,12 @@ const Profile = () => {
   };
 
   const projects = [
-    { name: 'CCubed', url: 'https://www.ccubed.dev' },
-    { name: 'HawkHacks', url: 'https://hawkhacks.ca' },
-    { name: 'HTB Team', url: 'https://app.hackthebox.com/users/activity/2035305' },
     { name: 'Konfer', url: 'https://konfer.ca/' },
+    { name: 'Shopify', url: 'https://shopify.com' },
+    { name: 'HawkHacks', url: 'https://hawkhacks.ca' },
+    { name: 'CCubed', url: 'https://www.ccubed.dev' },
     { name: 'LaurierCS', url: 'https://lauriercs.ca' },
+    { name: 'HTB Team', url: 'https://app.hackthebox.com/users/activity/2035305' },
   ];
 
   return (
