@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Card, CardContent, CardMedia, Dialog, DialogContent, DialogActions, Button, IconButton } from '@mui/material';
+import { Box, Typography, Card, CardContent, CardMedia, Dialog, DialogContent, IconButton } from '@mui/material';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import { Lock, Description, NavigateNext, NavigateBefore, ZoomIn, ZoomOut, Close as CloseIcon } from '@mui/icons-material';

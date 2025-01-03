@@ -28,7 +28,6 @@ const Home = () => (
 
 const AppContent = () => {
   const location = useLocation();
-  const isBlogPost = location.pathname.startsWith('/blog');
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
