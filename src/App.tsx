@@ -27,8 +27,6 @@ const Home = () => (
 );
 
 const AppContent = () => {
-  const location = useLocation();
-
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
