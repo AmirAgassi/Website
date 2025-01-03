@@ -53,9 +53,6 @@ const Profile = () => {
             <Typography variant="subtitle1" sx={{ mb: 2, color: 'text.secondary' }}>
             Software Engineer, Cybersecurity Enthusiast
             </Typography>
-            <Typography variant="subtitle1" sx={{ mb: 2, color: 'text.secondary' }}>
-                Will finish this website by the end of September. He swears
-            </Typography>
           </motion.div>
           
           <motion.div variants={itemVariants} transition={{ delay: 0.8 }}>
