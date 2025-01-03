@@ -45,12 +45,11 @@ const LockedOverlay = styled(Box)({
   top: 0,
   left: 0,
   right: 0,
-  height: '56.25%',
+  bottom: 0,
   backgroundColor: 'rgba(0, 0, 0, 0.4)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  paddingTop: '10%',
   color: 'white',
   zIndex: 1,
   backdropFilter: 'blur(2px)',
@@ -62,6 +61,13 @@ const LockedOverlay = styled(Box)({
   },
   '& .MuiTypography-root': {
     textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+  },
+  '& > div': {
+    marginTop: '10%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%'
   }
 });
 
@@ -87,13 +93,15 @@ const BlogSection = () => {
               <BlogCard>
                 {post.locked && (
                   <LockedOverlay>
-                    <Lock />
-                    <Typography variant="h6" sx={{ mb: 1 }}>
-                      Content Locked
-                    </Typography>
-                    <Typography variant="body2" align="center">
-                      Available {post.locked.until}
-                    </Typography>
+                    <Box>
+                      <Lock />
+                      <Typography variant="h6" sx={{ mb: 1 }}>
+                        Content Locked
+                      </Typography>
+                      <Typography variant="body2" align="center">
+                        Available {post.locked.until}
+                      </Typography>
+                    </Box>
                   </LockedOverlay>
                 )}
                 <BlogMedia
