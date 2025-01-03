@@ -2,8 +2,18 @@ import React, { useState } from 'react';
 import { Box, Typography, Card, CardContent, CardMedia, Chip, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 import { motion } from 'framer-motion';
 import { styled } from '@mui/system';
-import { Launch, ContentCopy } from '@mui/icons-material';
+import { Launch, ContentCopy, Visibility, ZoomIn, ZoomOut, NavigateNext, NavigateBefore, Close as CloseIcon } from '@mui/icons-material';
+import { Document, Page } from 'react-pdf';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { certifications, Certification } from '../data/certifications';
+
+// Set worker source
+if (typeof window !== 'undefined' && 'Worker' in window) {
+  const { pdfjs } = require('react-pdf');
+  pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+}
 
 const CertCard = styled(motion(Card))(({ theme }) => ({
   height: '365px',
@@ -46,7 +56,11 @@ const StyledChip = styled(Chip)(({ theme }) => ({
 
 const CertsSection = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [openPdfModal, setOpenPdfModal] = useState(false);
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
+  const [numPages, setNumPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [scale, setScale] = useState(1.0);
 
   const handleOpenModal = (cert: Certification) => {
     if (!cert.code) {
@@ -57,6 +71,18 @@ const CertsSection = () => {
       setSelectedCert(cert);
       setOpenModal(true);
     }
+  };
+
+  const handleViewPdf = (cert: Certification) => {
+    if (cert.pdf) {
+      setSelectedCert(cert);
+      setOpenPdfModal(true);
+    }
+  };
+
+  const handleClosePdfModal = () => {
+    setOpenPdfModal(false);
+    setSelectedCert(null);
   };
 
   const handleCloseModal = () => {
@@ -75,6 +101,27 @@ const CertsSection = () => {
       window.open(selectedCert.link, '_blank', 'noopener,noreferrer');
     }
     handleCloseModal();
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
+    setPageNumber(1);
+  };
+
+  const handlePrevPage = () => {
+    setPageNumber(page => Math.max(page - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPageNumber(page => Math.min(page + 1, numPages));
+  };
+
+  const handleZoomIn = () => {
+    setScale(scale => Math.min(scale + 0.2, 2.0));
+  };
+
+  const handleZoomOut = () => {
+    setScale(scale => Math.max(scale - 0.2, 0.6));
   };
 
   return (
@@ -172,11 +219,18 @@ const CertsSection = () => {
                       color: 'white',
                     }}
                   />
-                  {cert.link && (
-                    <IconButton onClick={() => handleOpenModal(cert)} sx={{ color: cert.color }}>
-                      <Launch />
-                    </IconButton>
-                  )}
+                  <Box>
+                    {cert.completed && cert.pdf && (
+                      <IconButton onClick={() => handleViewPdf(cert)} sx={{ color: cert.color, mr: 1 }}>
+                        <Visibility />
+                      </IconButton>
+                    )}
+                    {cert.link && (
+                      <IconButton onClick={() => handleOpenModal(cert)} sx={{ color: cert.color }}>
+                        <Launch />
+                      </IconButton>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </CardContent>
@@ -184,8 +238,129 @@ const CertsSection = () => {
         ))}
       </Box>
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
-        <DialogTitle>Certification Code</DialogTitle>
+      {/* PDF Modal */}
+      <Dialog 
+        open={openPdfModal} 
+        onClose={handleClosePdfModal}
+        maxWidth="lg"
+        fullWidth
+        aria-labelledby="pdf-dialog-title"
+        PaperProps={{
+          sx: {
+            minHeight: '90vh',
+            maxHeight: '90vh'
+          }
+        }}
+      >
+        <DialogTitle id="pdf-dialog-title" sx={{ pb: 1 }}>
+          {selectedCert?.name} Certificate
+          <Box sx={{ position: 'absolute', right: 8, top: 8, display: 'flex', gap: 1 }}>
+            <IconButton
+              onClick={() => window.open(selectedCert?.pdf, '_blank')}
+              color="primary"
+              sx={{ color: 'white' }}
+              aria-label="open in new tab"
+            >
+              <Launch />
+            </IconButton>
+            <IconButton
+              onClick={handleClosePdfModal}
+              color="primary"
+              sx={{ color: 'white' }}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            height: '100%',
+            overflow: 'hidden'
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2, 
+              mb: 2,
+              alignItems: 'center',
+              width: '100%',
+              justifyContent: 'center'
+            }}>
+              <IconButton onClick={handlePrevPage} disabled={pageNumber <= 1}>
+                <NavigateBefore />
+              </IconButton>
+              <Typography>
+                Page {pageNumber} of {numPages}
+              </Typography>
+              <IconButton onClick={handleNextPage} disabled={pageNumber >= numPages}>
+                <NavigateNext />
+              </IconButton>
+              <Box sx={{ mx: 2, borderLeft: 1, height: 24, borderColor: 'divider' }} />
+              <IconButton onClick={handleZoomOut} disabled={scale <= 0.6}>
+                <ZoomOut />
+              </IconButton>
+              <Typography>
+                {Math.round(scale * 100)}%
+              </Typography>
+              <IconButton onClick={handleZoomIn} disabled={scale >= 2.0}>
+                <ZoomIn />
+              </IconButton>
+            </Box>
+            <Box sx={{ 
+              flex: 1, 
+              overflow: 'auto', 
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              '& .react-pdf__Document': {
+                lineHeight: 1,
+                '& .react-pdf__Page': {
+                  marginBottom: 2,
+                  '& canvas': {
+                    maxWidth: '100%',
+                    height: 'auto !important'
+                  }
+                }
+              }
+            }}>
+              <Document
+                file={selectedCert?.pdf}
+                onLoadSuccess={onDocumentLoadSuccess}
+                loading={
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Typography>Loading PDF...</Typography>
+                  </Box>
+                }
+                error={
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Typography color="error">Failed to load PDF. Please try again.</Typography>
+                  </Box>
+                }
+              >
+                <Page
+                  pageNumber={pageNumber}
+                  scale={scale}
+                  renderTextLayer={true}
+                  renderAnnotationLayer={true}
+                />
+              </Document>
+            </Box>
+          </Box>
+        </DialogContent>
+      </Dialog>
+
+      {/* Code Modal */}
+      <Dialog 
+        open={openModal} 
+        onClose={handleCloseModal}
+        aria-labelledby="code-dialog-title"
+        disableScrollLock={false}
+        keepMounted={false}
+      >
+        <DialogTitle id="code-dialog-title">Certification Code</DialogTitle>
         <DialogContent>
           <Typography variant="body1" gutterBottom>
             Please copy the code below before proceeding to the certification link:
@@ -197,7 +372,7 @@ const CertsSection = () => {
             InputProps={{
               readOnly: true,
               endAdornment: (
-                <IconButton onClick={handleCopyCode}>
+                <IconButton onClick={handleCopyCode} aria-label="copy certification code">
                   <ContentCopy />
                 </IconButton>
               ),
@@ -206,8 +381,8 @@ const CertsSection = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} sx={{ color: 'white' }}>Cancel</Button>
-          <Button onClick={handleGoToLink} variant="contained" color="primary">
+          <Button onClick={handleCloseModal}>Cancel</Button>
+          <Button onClick={handleGoToLink} variant="contained" color="primary" autoFocus>
             Go to Certification
           </Button>
         </DialogActions>
