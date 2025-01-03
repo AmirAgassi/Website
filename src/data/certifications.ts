@@ -1,4 +1,4 @@
-import { School, Work, Code, Visibility } from '@mui/icons-material';
+import { School, Work, Code } from '@mui/icons-material';
 
 export interface Certification {
   name: string;
