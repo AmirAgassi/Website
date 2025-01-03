@@ -135,9 +135,6 @@ const CertsSection = () => {
       }}>
         Certification Soup
       </Typography>
-      <Typography variant="subtitle1" align="center" sx={{ mb: 6, fontStyle: 'italic' }}>
-        Trust me. This section will look cooler in a few months.
-      </Typography>
       <Box
         sx={{
           display: 'flex',

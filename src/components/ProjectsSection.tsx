@@ -94,7 +94,7 @@ const ProjectsSection = () => {
       tags: ["TypeScript", "Go", "PostgreSQL", "React", "Echo"],
       date: "2024",
       github: "https://github.com/KonferCA/SPUR",
-      live: "https://onboard.spuric.com",
+      live: null,
       youtube: null,
       color: "#2B5BA1",
     },
