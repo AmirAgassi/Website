@@ -33,7 +33,14 @@ const AppContent = () => {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
-      <Container maxWidth={isBlogPost ? false : "lg"} sx={{ width: isBlogPost ? '90%' : 'auto' }}>
+      <Container 
+        maxWidth="lg"
+        sx={{ 
+          width: '100%',
+          maxWidth: isBlogPost ? '90%' : 'lg',
+          margin: '0 auto'
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog/*" element={<BlogPostLayout />} />
