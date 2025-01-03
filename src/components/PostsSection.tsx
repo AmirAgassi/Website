@@ -1,9 +1,33 @@
-import React from 'react';
-import { Box, Typography, Card, CardContent, CardMedia, Grid } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Card, CardContent, CardMedia, Dialog, DialogContent, DialogActions, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
-import { Lock } from '@mui/icons-material';
+import { Lock, Description, NavigateNext, NavigateBefore, ZoomIn, ZoomOut, Close as CloseIcon } from '@mui/icons-material';
+import { Document, Page } from 'react-pdf';
 import { posts } from '../data/posts';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+
+const PostsContainer = styled(Box)({
+  display: 'flex',
+  overflowX: 'auto',
+  overflowY: 'hidden',
+  gap: '2rem',
+  padding: '1rem 0',
+  '&::-webkit-scrollbar': {
+    height: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    background: 'transparent',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: '#888',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    background: '#555',
+  },
+});
 
 const BlogCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -17,6 +41,8 @@ const BlogCard = styled(Card)(({ theme }) => ({
   cursor: 'pointer',
   minHeight: '400px',
   position: 'relative',
+  width: '350px',
+  flexShrink: 0,
 }));
 
 const BlogMedia = styled(CardMedia)({
@@ -71,8 +97,65 @@ const LockedOverlay = styled(Box)({
   }
 });
 
+const WriteupIndicator = styled(Box)({
+  position: 'absolute',
+  top: 15,
+  right: 15,
+  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  borderRadius: '50%',
+  padding: '12px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1,
+  '& .MuiSvgIcon-root': {
+    color: 'white',
+    fontSize: '2.5rem',
+  },
+});
+
 const BlogSection = () => {
   const publishedPosts = posts.filter(post => post.published);
+  const [openPdfModal, setOpenPdfModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<typeof posts[0] | null>(null);
+  const [numPages, setNumPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [scale, setScale] = useState(1.0);
+
+  const handlePostClick = (post: typeof posts[0]) => {
+    if (post.type === 'writeup' && post.pdf) {
+      setSelectedPost(post);
+      setOpenPdfModal(true);
+    }
+  };
+
+  const handleClosePdfModal = () => {
+    setOpenPdfModal(false);
+    setSelectedPost(null);
+    setPageNumber(1);
+    setScale(1.0);
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
+    setPageNumber(1);
+  };
+
+  const handlePrevPage = () => {
+    setPageNumber(page => Math.max(page - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPageNumber(page => Math.min(page + 1, numPages));
+  };
+
+  const handleZoomIn = () => {
+    setScale(scale => Math.min(scale + 0.2, 2.0));
+  };
+
+  const handleZoomOut = () => {
+    setScale(scale => Math.max(scale - 0.2, 0.6));
+  };
 
   return (
     <Box sx={{ py: 8 }}>
@@ -85,61 +168,126 @@ const BlogSection = () => {
       }}>
         Latest Blog Posts
       </Typography>
-      <Grid container spacing={4}>
+      <PostsContainer>
         {publishedPosts.map((post) => (
-          <Grid item key={post.id} xs={12} sm={6} md={4}>
-            <Link to={post.path} style={{ textDecoration: 'none' }}>
-              <BlogCard>
-                {post.locked && (
-                  <LockedOverlay>
-                    <Box>
-                      <Lock />
-                      <Typography variant="h6" sx={{ mb: 1 }}>
-                        Content Locked
-                      </Typography>
-                      <Typography variant="body2" align="center">
-                        Available {post.locked.until}
-                      </Typography>
-                    </Box>
-                  </LockedOverlay>
-                )}
-                <BlogMedia
-                  image={post.image}
-                  title={post.title}
-                />
-                <BlogContent>
+          <Box
+            key={post.id}
+            onClick={() => handlePostClick(post)}
+            component={post.type === 'writeup' ? 'div' : Link}
+            to={post.type === 'writeup' ? undefined : post.path}
+            style={{ textDecoration: 'none' }}
+          >
+            <BlogCard>
+              {post.locked && (
+                <LockedOverlay>
                   <Box>
-                    <Typography 
-                      variant="h5" 
-                      sx={{
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        minHeight: '3.6em',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        lineHeight: '1.4em',
-                        margin: 0,
-                      }}
-                    >
-                      {post.title}
+                    <Lock />
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                      Content Locked
                     </Typography>
-                    <BlogExcerpt variant="body2" color="text.secondary">
-                      {post.excerpt}
-                    </BlogExcerpt>
+                    <Typography variant="body2" align="center">
+                      Available {post.locked.until}
+                    </Typography>
                   </Box>
-                  <Typography variant="caption" color="text.secondary" sx={{ 
-                    mt: 2,
-                    display: 'block',
-                    textAlign: 'right'
-                  }}>
-                    {post.date}
+                </LockedOverlay>
+              )}
+              {post.type === 'writeup' && (
+                <WriteupIndicator>
+                  <Description />
+                </WriteupIndicator>
+              )}
+              <BlogMedia
+                image={post.image}
+                title={post.title}
+              />
+              <BlogContent>
+                <Box>
+                  <Typography 
+                    variant="h5" 
+                    sx={{
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      minHeight: '3.6em',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      lineHeight: '1.4em',
+                      margin: 0,
+                    }}
+                  >
+                    {post.title}
                   </Typography>
-                </BlogContent>
-              </BlogCard>
-            </Link>
-          </Grid>
+                  <BlogExcerpt variant="body2" color="text.secondary">
+                    {post.excerpt}
+                  </BlogExcerpt>
+                </Box>
+                <Typography variant="caption" color="text.secondary" sx={{ 
+                  mt: 2,
+                  display: 'block',
+                  textAlign: 'right'
+                }}>
+                  {post.date}
+                </Typography>
+              </BlogContent>
+            </BlogCard>
+          </Box>
         ))}
-      </Grid>
+      </PostsContainer>
+
+      {/* PDF Modal */}
+      <Dialog
+        open={openPdfModal}
+        onClose={handleClosePdfModal}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: {
+            minHeight: '90vh',
+            maxHeight: '90vh',
+            display: 'flex',
+            flexDirection: 'column',
+          }
+        }}
+      >
+        <DialogContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'hidden' }}>
+          <Box sx={{ position: 'absolute', right: 8, top: 8, zIndex: 1 }}>
+            <IconButton onClick={handleClosePdfModal} size="large">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+            <IconButton onClick={handleZoomOut}>
+              <ZoomOut />
+            </IconButton>
+            <IconButton onClick={handleZoomIn}>
+              <ZoomIn />
+            </IconButton>
+            <IconButton onClick={handlePrevPage} disabled={pageNumber <= 1}>
+              <NavigateBefore />
+            </IconButton>
+            <Typography sx={{ alignSelf: 'center' }}>
+              Page {pageNumber} of {numPages}
+            </Typography>
+            <IconButton onClick={handleNextPage} disabled={pageNumber >= numPages}>
+              <NavigateNext />
+            </IconButton>
+          </Box>
+          <Box sx={{ flex: 1, overflow: 'auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            {selectedPost && (
+              <Document
+                file={selectedPost.pdf}
+                onLoadSuccess={onDocumentLoadSuccess}
+                loading={<Typography>Loading PDF...</Typography>}
+              >
+                <Page
+                  pageNumber={pageNumber}
+                  scale={scale}
+                  loading={<Typography>Loading page...</Typography>}
+                />
+              </Document>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
