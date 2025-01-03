@@ -6,6 +6,7 @@ import { styled } from '@mui/system';
 import danghuiImage from '../assets/danghui.jpg';
 import blackstarImage from '../assets/blackstar.jpg';
 import dumpFunImage from '../assets/dump.png';
+import spurImage from '../assets/spur.jpg';
 
 const ProjectCard = styled(motion(Card))(({ theme }) => ({
   position: 'relative',
@@ -87,6 +88,17 @@ const ProjectsContainer = styled(Box)({
 const ProjectsSection = () => {
   const projects = [
     {
+      title: "SPUR",
+      description: "A streamlined digital platform for SPUR to manage startup on-boarding, review, and funding processes. Features include user authentication, company profiles, projects, and funding.",
+      image: spurImage,
+      tags: ["TypeScript", "Go", "PostgreSQL", "React", "Echo"],
+      date: "2024",
+      github: "https://github.com/KonferCA/SPUR",
+      live: "https://onboard.spuric.com",
+      youtube: null,
+      color: "#2B5BA1",
+    },
+    {
       title: "Danghui cLVM",
       description: "Arbitrary code execution exploit for Roblox, utilizing an innovative script execution method to execute compiled lua on Roblox's own lua_State.",
       image: danghuiImage,
@@ -98,17 +110,6 @@ const ProjectsSection = () => {
       color: "#FF0000",
     },
     {
-      title: "BlackStar",
-      description: "Detailed explanations of bypasses for Roblox's security checks, including retcheck, FindWindowA, and anti log-upload crashes.",
-      image: blackstarImage,
-      tags: ["C++", "Reverse Engineering", "Security", "Roblox"],
-      date: "2020",
-      github: "https://github.com/AmirAgassi/Blackstar",
-      live: null,
-      youtube: null,
-      color: "#000000",
-    },
-    {
       title: "dump.fun",
       description: "Advanced, open-source memecoin launch sniping script for Solana blockchain. Uses reverse-engineered pump.fun program IDL and RPC node support.",
       image: dumpFunImage,
@@ -118,6 +119,17 @@ const ProjectsSection = () => {
       live: null,
       youtube: null,
       color: "#1E90FF",
+    },
+    {
+      title: "BlackStar",
+      description: "Detailed explanations of bypasses for Roblox's security checks, including retcheck, FindWindowA, and anti log-upload crashes.",
+      image: blackstarImage,
+      tags: ["C++", "Reverse Engineering", "Security", "Roblox"],
+      date: "2020",
+      github: "https://github.com/AmirAgassi/Blackstar",
+      live: null,
+      youtube: null,
+      color: "#000000",
     },
   ];
 
@@ -148,7 +160,11 @@ const ProjectsSection = () => {
             <ProjectMedia 
               image={project.image} 
               title={project.title}
-              sx={{ backgroundPosition: 'center center' }}
+              sx={{ 
+                backgroundPosition: 'center center',
+                backgroundSize: 'contain',
+                backgroundColor: '#ffffff'
+              }}
             />
             <ContentOverlay>
               <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
