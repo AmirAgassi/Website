@@ -26,8 +26,8 @@ export interface BlogPost {
 export const posts: BlogPost[] = [
   {
     id: 'first-post',
-    title: 'WLU Information Exposed: By Using Bing',
-    excerpt: 'How I disclosed exposed financial and student information to my university, by being the only student that actually used Bing. Unironically.',
+    title: 'WLU Information Disclosure: Found w/ Bing',
+    excerpt: 'How I found exposed financial and student information to my university, just by being the only student that actually used Bing. Unironically.',
     date: '2024-01-03',
     image: cybersecurityImage,
     path: '/blog/first-post',
