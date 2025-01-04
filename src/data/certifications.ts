@@ -64,7 +64,7 @@ export const certifications: Certification[] = [
   },
   { 
     name: "CompTIA Secure Infrastructure Specialist", 
-    date: "Expected Completion: September 2025", 
+    date: "December 2024", 
     icon: Code, 
     color: "#C8102E", 
     completed: true,
@@ -74,7 +74,7 @@ export const certifications: Certification[] = [
   },
   { 
     name: "CompTIA IT Operations Specialist", 
-    date: "Expected Completion: August 2025", 
+    date: "December 2024", 
     icon: Work, 
     color: "#C8102E", 
     completed: true,

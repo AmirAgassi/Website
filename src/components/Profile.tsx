@@ -1,11 +1,48 @@
-import React from 'react';
-import { Typography, Box, Container, Avatar, Divider, Link, Tooltip } from '@mui/material';
-import { LinkedIn, GitHub } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { Typography, Box, Container, Avatar, Divider, Link, Tooltip, Button, Dialog, DialogContent, IconButton } from '@mui/material';
+import { LinkedIn, GitHub, Description, NavigateNext, NavigateBefore, ZoomIn, ZoomOut, Close as CloseIcon } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { Document, Page } from 'react-pdf';
 import { ReactComponent as DiscordIcon } from '../assets/discord.svg';
 import amirImage from '../assets/amir.jpg';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 const Profile = () => {
+  const [openPdfModal, setOpenPdfModal] = useState(false);
+  const [numPages, setNumPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [scale, setScale] = useState(1.0);
+
+  const resumeUrl = 'https://raw.githubusercontent.com/AmirAgassi/Resume/main/AmirAgassi_Resume.pdf';
+
+  const handleClosePdfModal = () => {
+    setOpenPdfModal(false);
+    setPageNumber(1);
+    setScale(1.0);
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
+    setPageNumber(1);
+  };
+
+  const handlePrevPage = () => {
+    setPageNumber(page => Math.max(page - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPageNumber(page => Math.min(page + 1, numPages));
+  };
+
+  const handleZoomIn = () => {
+    setScale(scale => Math.min(scale + 0.2, 2.0));
+  };
+
+  const handleZoomOut = () => {
+    setScale(scale => Math.max(scale - 0.2, 0.6));
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
@@ -122,7 +159,7 @@ const Profile = () => {
           </motion.div>
           
           <motion.div variants={itemVariants} transition={{ delay: 1.2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, alignItems: 'center' }}>
               <motion.div whileHover="hover" variants={socialIconVariants}>
                 <Link href="https://www.linkedin.com/in/amir-agassi/" target="_blank" rel="noopener noreferrer">
                   <LinkedIn sx={{ fontSize: 30, color: 'text.secondary', cursor: 'pointer' }} />
@@ -134,27 +171,136 @@ const Profile = () => {
                 </Link>
               </motion.div>
               <motion.div whileHover="hover" variants={socialIconVariants}>
-                <Tooltip
-                  title="@stalepointers"
-                  placement="bottom"
-                  arrow
-                >
-                  <Box 
-                    sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      color: 'text.secondary', 
-                      cursor: 'pointer' 
-                    }}
-                  >
+                <Tooltip title="@stalepointers" placement="bottom" arrow>
+                  <Box sx={{ display: 'flex', alignItems: 'center', color: 'text.secondary', cursor: 'pointer' }}>
                     <DiscordIcon style={{ width: 30, height: 30 }} />
                   </Box>
                 </Tooltip>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ width: 'fit-content' }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => setOpenPdfModal(true)}
+                  startIcon={<Description />}
+                  size="medium"
+                  sx={{
+                    borderColor: '#FE6B8B',
+                    color: '#FE6B8B',
+                    '&:hover': {
+                      borderColor: '#FE6B8B',
+                      backgroundColor: 'rgba(254, 107, 139, 0.08)',
+                    },
+                  }}
+                >
+                  Resume
+                </Button>
               </motion.div>
             </Box>
           </motion.div>
         </Box>
       </motion.div>
+
+      {/* Resume PDF Modal */}
+      <Dialog
+        open={openPdfModal}
+        onClose={handleClosePdfModal}
+        maxWidth={false}
+        PaperProps={{
+          sx: {
+            height: 'auto',
+            maxHeight: '90vh',
+            width: 'auto',
+            maxWidth: '90vw',
+            display: 'flex',
+            flexDirection: 'column',
+            m: 2
+          }
+        }}
+      >
+        <DialogContent sx={{ 
+          flex: 1, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          overflow: 'hidden',
+          p: 2
+        }}>
+          <Box sx={{ position: 'absolute', right: 8, top: 8, zIndex: 1 }}>
+            <IconButton onClick={handleClosePdfModal} size="large">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Box sx={{ position: 'absolute', left: 8, top: 8, zIndex: 1, display: 'flex', gap: 1 }}>
+            <IconButton 
+              href="https://github.com/AmirAgassi/Resume/blob/main/AmirAgassi_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              component={Link}
+              size="large"
+              sx={{ 
+                color: 'text.secondary',
+                '&:hover': {
+                  color: '#FE6B8B'
+                }
+              }}
+            >
+              <GitHub />
+            </IconButton>
+            <IconButton 
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              component={Link}
+              size="large"
+              sx={{ 
+                color: 'text.secondary',
+                '&:hover': {
+                  color: '#FE6B8B'
+                }
+              }}
+            >
+              <Description />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+            <IconButton onClick={handleZoomOut}>
+              <ZoomOut />
+            </IconButton>
+            <IconButton onClick={handleZoomIn}>
+              <ZoomIn />
+            </IconButton>
+            <IconButton onClick={handlePrevPage} disabled={pageNumber <= 1}>
+              <NavigateBefore />
+            </IconButton>
+            <Typography sx={{ alignSelf: 'center' }}>
+              Page {pageNumber} of {numPages}
+            </Typography>
+            <IconButton onClick={handleNextPage} disabled={pageNumber >= numPages}>
+              <NavigateNext />
+            </IconButton>
+          </Box>
+          <Box sx={{ 
+            overflow: 'auto', 
+            display: 'flex', 
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%'
+          }}>
+            <Document
+              file={resumeUrl}
+              onLoadSuccess={onDocumentLoadSuccess}
+              loading={<Typography>Loading PDF...</Typography>}
+            >
+              <Page
+                pageNumber={pageNumber}
+                scale={scale}
+                loading={<Typography>Loading page...</Typography>}
+              />
+            </Document>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };
