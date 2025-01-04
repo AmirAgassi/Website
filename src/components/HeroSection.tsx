@@ -192,11 +192,11 @@ const HeroSectionComponent = () => {
 
   return (
     <HeroSection>
-      <Grid container spacing={4} alignItems="center">
-        <Grid item xs={12} md={6}>
+      <Grid container alignItems="center" spacing={4}>
+        <Grid item xs={12} md={5} lg={4}>
           <Profile />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={7} lg={8}>
           <Box 
             sx={{ 
               backgroundColor: 'rgba(31, 34, 41, 0.7)',
@@ -204,7 +204,8 @@ const HeroSectionComponent = () => {
               fontFamily: '"DejaVu Sans Mono", monospace',
               height: '300px',
               width: '100%',
-              maxWidth: '800px',
+              maxWidth: '600px',
+              margin: '0 auto',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
               border: '1px solid #2E3440',
               display: 'flex',
@@ -304,7 +305,7 @@ const HeroSectionComponent = () => {
         sx={{
           position: 'absolute',
           top: '10%',
-          right: '5%',
+          right: '2%',
           width: '200px',
           height: '200px',
           background: 'radial-gradient(circle, #ff00ff 0%, transparent 70%)',
@@ -318,7 +319,7 @@ const HeroSectionComponent = () => {
         sx={{
           position: 'absolute',
           bottom: '10%',
-          left: '5%',
+          left: '6%',
           width: '300px',
           height: '300px',
           background: 'radial-gradient(circle, #00ffff 0%, transparent 70%)',
