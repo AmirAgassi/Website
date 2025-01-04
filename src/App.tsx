@@ -31,11 +31,17 @@ const AppContent = () => {
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
       <Container 
-        maxWidth="lg"
+        maxWidth={false}
         sx={{ 
           width: '100%',
-          maxWidth: '100%',
-          margin: '0 auto'
+          maxWidth: '1600px',
+          margin: '0 auto',
+          px: {
+            xs: 2,
+            sm: 3,
+            md: 4,
+            lg: 6
+          }
         }}
       >
         <Routes>
