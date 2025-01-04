@@ -65,7 +65,7 @@ export const posts: BlogPost[] = [
   },
   {
     id: 'first-post',
-    title: 'WLU Information Disclosure: Found w/ Bing',
+    title: 'WLU Information Disclosure: Exposed through... Bing.com',
     excerpt: 'How I found exposed financial and student information to my university, just by being the only student that actually used Bing. Unironically.',
     date: '2024-01-03',
     image: cybersecurityImage,
