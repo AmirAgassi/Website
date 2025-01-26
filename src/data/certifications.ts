@@ -27,6 +27,29 @@ export const certifications: Certification[] = [
     pdf: `${process.env.PUBLIC_URL}/certifications/aws-solutions-architect-professional.pdf`
   },
   { 
+    name: "Google Cloud Professional Data Engineer", 
+    date: "January 2025", 
+    link: "https://www.credly.com/earner/earned/badge/c9811ec9-a04e-439f-a1bf-f4e18f11c6ee",
+    icon: Code, 
+    color: "#4285F4", 
+    completed: true,
+    image: "https://images.credly.com/images/2d613ff8-8879-430b-b2d8-925fa29785e8/image.png",
+    tags: ["Cloud", "Data Engineering"],
+    pdf: `${process.env.PUBLIC_URL}/certifications/google-data-engineer.pdf`
+  },
+  { 
+    name: "ITIL® 4 Foundation", 
+    date: "January 2024", 
+    icon: School, 
+    color: "#8E63E6", 
+    completed: true,
+    image: "https://agilizing.com/wp-content/uploads/2024/08/ITIL-4-Foundation.png",
+    tags: ["ITSM", "Service Management"],
+    code: "71F2045072D44EE5",
+    pdf: `${process.env.PUBLIC_URL}/certifications/e-cert.pdf`,
+    note: "ITIL® is a registered trade mark of AXELOS Limited, used under permission of AXELOS Limited. All rights reserved."
+  },
+  { 
     name: "CompTIA A+ IT",
     date: "September 2023", 
     link: "https://www.certmetrics.com/comptia/public/verification.aspx/", 
@@ -81,16 +104,6 @@ export const certifications: Certification[] = [
     image: "https://images.credly.com/images/7f7657b9-4d1b-4b8d-b5ee-5fdf6d7ccd71/twitter_thumb_201604_04294_CompTIA_Cert_Badges_Specialist_-_CIOS.png",
     tags: ["IT Ops","Sys. Administration"],
     pdf: `${process.env.PUBLIC_URL}/certifications/comptia-it-ops-specialist.pdf`
-  },
-  { 
-    name: "ITIL® Foundation Certification", 
-    date: "Expected Completion: October 2024", 
-    icon: School, 
-    color: "#4A90E2", 
-    completed: false,
-    image: "https://images.credly.com/size/340x340/images/6f2a9ef8-4da2-4e67-bd52-84fbaa1af776/image.png",
-    tags: ["ITSM","Service Lifecycle"],
-    note: "Subject to vendor availability. ITIL® is a registered trade mark of AXELOS Limited, used under permission of AXELOS Limited. All rights reserved."
   },
   { 
     name: "CompTIA Project+", 
