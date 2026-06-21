@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- amir agassi's homepage. hand-coded. -->
+<html>
+<head>
+<title>Amir Agassi's Homepage :: Welcome</title>
+<meta name="author" content="Amir Agassi">
+<meta name="description" content="The personal homepage of Amir Agassi, co-founder and CTO of BrokerPlus.">
+<meta name="keywords" content="amir agassi, brokerplus, cto, computer science, cybersecurity, software engineer, security research">
+<link rel="icon" href="favicon.ico">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<a name="top"></a>
+<center>
+
+<marquee behavior="alternate" scrollamount="6"><font face="Comic Sans MS, cursive" color="#FF00FF" size="2">welcome to my homepage</font></marquee>
+
+<font face="Times New Roman, serif" size="7" color="#000080"><b>~ Amir Agassi's Homepage ~</b></font>
+<br>
+<font face="Verdana, sans-serif" size="2" color="#444444"><b>CTO &amp; Co-Founder @ BrokerPlus &middot; previously @ Boardy &amp; Shopify</b></font>
+
+<br><br>
+
+<!-- nav bar. copy this onto every page so they match -->
+<font face="Verdana, sans-serif" size="2">
+[ <a href="index.html">Home</a> ]
+&nbsp;|&nbsp;
+[ <a href="about.html">About Me</a> ]
+&nbsp;|&nbsp;
+[ <a href="projects.html">My Projects</a> ]
+&nbsp;|&nbsp;
+[ <a href="guestbook.html">Guestbook</a> ]
+</font>
+
+<hr width="80%" size="2" color="#000080">
+
+<table width="620" cellpadding="10" cellspacing="0" border="0">
+<tr>
+
+<td valign="top" width="170" align="center">
+<img src="amir.jpg" width="150" height="150" border="3" alt="a photo of me, amir">
+<br>
+<font face="Verdana, sans-serif" size="1" color="#666666">[ that's me ]</font>
+</td>
+
+<td valign="top">
+
+<font face="Times New Roman, serif" size="3" color="#000000">
+
+<font size="5" color="#000080"><b>Welcome</b></font>
+<br><br>
+
+Hi, I'm <b>Amir Agassi</b>. I'm the co-founder and CTO of <b>BrokerPlus</b>, a
+vertical SaaS platform built for residential mortgage brokers.
+
+<br><br>
+
+I studied <b>Computer Science</b> at Wilfrid Laurier University and
+<b>Cybersecurity &amp; Information Assurance</b> at Western Governors University.
+My background is in software engineering and security research. Before BrokerPlus
+I worked at <b>Boardy</b> and <b>Shopify</b>.
+
+<br><br>
+
+Welcome to my homepage. Have a look around, and feel free to reach out.
+
+</font>
+
+</td>
+</tr>
+</table>
+
+<br>
+
+<!-- featured -->
+<table width="620" cellpadding="10" cellspacing="0" border="1" bordercolor="#000080" bgcolor="#F8F8FF">
+<tr><td align="left">
+<font face="Times New Roman, serif" size="3" color="#000000">
+<font size="4" color="#000080"><b>&#9733; What I'm building: BrokerPlus</b></font>
+<br><br>
+BrokerPlus is a vertical SaaS platform for residential mortgage brokers. It scans
+a broker's client database and surfaces the revenue hiding inside it: refinances,
+renewals, HELOCs, reverse mortgages, and debt consolidation opportunities, with
+lender-specific IRD penalty math already calculated. Brokers import from Filogix,
+Velocity, Finmo, or CSV in minutes, then let the platform handle automated client
+outreach, branded equity reports, and ongoing FINTRAC/AML screening.
+<br><br>
+<font size="2"><a href="https://getbrokerplus.ca" target="_blank"><b>&raquo; getbrokerplus.ca</b></a></font>
+</font>
+</td></tr>
+</table>
+
+<br>
+
+<!-- quick links -->
+<font face="Verdana, sans-serif" size="2" color="#000000"><b>~ find me elsewhere ~</b></font>
+<br><br>
+<font face="Verdana, sans-serif" size="2">
+<a href="https://github.com/AmirAgassi" target="_blank">GitHub</a> &nbsp;&middot;&nbsp;
+<a href="https://www.linkedin.com/in/amir-agassi/" target="_blank">LinkedIn</a> &nbsp;&middot;&nbsp;
+<a href="https://app.hackthebox.com/users/activity/2035305" target="_blank">HackTheBox</a> &nbsp;&middot;&nbsp;
+<a href="https://github.com/AmirAgassi/Resume/blob/main/AmirAgassi_Resume.pdf" target="_blank">Resume</a> &nbsp;&middot;&nbsp;
+<a href="https://getbrokerplus.ca" target="_blank">BrokerPlus</a> &nbsp;&middot;&nbsp;
+<a href="mailto:amir@getbrokerplus.ca">Email</a>
+</font>
+
+<br><br>
+
+<hr width="80%" size="2" color="#000080">
+
+<!-- footer -->
+<font face="Verdana, sans-serif" size="1" color="#666666">
+<a href="#top">[ back to top ]</a>
+<br><br>
+You are visitor number
+<font face="Courier New, monospace" color="#000000"><b>[&nbsp;<span id="hits">0&nbsp;0&nbsp;0&nbsp;7&nbsp;3&nbsp;4</span>&nbsp;]</b></font>
+<br><br>
+Last updated June 21, 2026.
+<br>
+&copy; 2026 Amir Agassi &middot; <a href="mailto:amir@getbrokerplus.ca">amir@getbrokerplus.ca</a>
+</font>
+
+<br><br>
+
+</center>
+
+<script>
+// live visit counter. falls back to the static 734 if the api is unreachable.
+(function () {
+  fetch('/api/counter').then(function (r) { return r.json(); }).then(function (d) {
+    if (d && d.count != null) {
+      var s = String(d.count).padStart(6, '0').split('').join(' ');
+      document.getElementById('hits').innerHTML = s;
+    }
+  }).catch(function () {});
+})();
+</script>
+
+</body>
+</html>
